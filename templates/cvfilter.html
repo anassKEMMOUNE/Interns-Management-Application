@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+
+</head>
+<body>
+    {% include "navbar.html" %}
+    <div class="main-container">
+        <div class="content-container">
+            <form id="uploadForm" enctype="multipart/form-data">
+            <div class="cv-filtering">
+                <h2>CVs Filtering</h2>
+                <div class="filter-input">
+                    <label for="keyword">Keyword</label>
+                    <input type="text" id="keyword" placeholder="Enter Keyword" aria-label="Keyword">
+                    <button type="button" id="addKeywordButton">Add Keyword</button>
+                </div>
+                <div id="keywordList"></div>
+            </div>
+            <div class="upload-cvs">
+                <h2>Upload CVs</h2>
+                <div class="file-upload">
+
+                        <input type="text" id="filename" class="file-name" placeholder="No file chosen" readonly>
+                        <input type="file" id="fileInput" style="display: none;" multiple />
+                        <button type="button" id="browseButton" class="btn-upload">Browse</button>
+                        
+                    
+                </div>
+            </div>
+            <button type="submit" id="uploadButton">Filter</button>
+        </form>
+ 
+
+            <table class="cv-table">
+                <thead>
+                    <tr>
+                        <th>Candidate ID</th>
+                        <th>Candidate</th>
+                        <th>Resume</th>
+                        <th>Filter</th>
+                    </tr>
+                </thead>
+                <tbody id="cvTableBody">
+                    {% for file_name in files %}
+                        <tr>
+                            <td></td> <!-- Empty candidate ID -->
+                            <td></td> <!-- Empty candidate name -->
+                            <td>{{ file_name }}</td> <!-- File name -->
+                            <td><button class="btn-remove">remove</button></td> <!-- Remove button -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        var keywords = [];
+        document.getElementById('browseButton').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+    
+        document.getElementById('fileInput').addEventListener('change', function() {
+            var fileInput = document.getElementById('fileInput');
+            var filenameDisplay = document.getElementById('filename');
+            var filenames = Array.from(fileInput.files).map(file => file.name);
+            filenameDisplay.value = filenames.length > 0 ? filenames.join(', ') : 'No file chosen';
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(); // Create form data object
+            var files = document.getElementById('fileInput').files; // Get selected files
+            for (var i = 0; i < files.length; i++) {
+                formData.append('files[]', files[i]); // Append each file to form data with 'files[]' key
+            }
+
+            keywords.forEach(function(keyword) {
+        formData.append('keywords[]', keyword); // Append each keyword to form data with 'keywords[]' key
+    });
+            // Send POST request with form data
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                // Handle response
+                console.log(response);
+                location.reload();
+                // Redirect or show success message
+            })
+            .catch(error => {
+                // Handle error
+                console.error('Error:', error);
+                // Show error message
+            });
+        });
+
+        document.getElementById('addKeywordButton').addEventListener('click', function() {
+            var keywordInput = document.getElementById('keyword');
+            var keyword = keywordInput.value.trim();
+            if (keyword !== '') {
+                var keywordList = document.getElementById('keywordList');
+                var etiquette = document.createElement('span');
+                etiquette.textContent = keyword;
+                etiquette.classList.add('keyword-etiquette');
+                keywordList.appendChild(etiquette);
+                keywordInput.value = ''; // Clear input field
+                keywords.push(keyword);
+        }});
+    </script>
+</body>
+</html>

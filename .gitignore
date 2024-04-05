@@ -1,0 +1,4 @@
+# Ignore the 'my_folder' folder
+flask_session/
+__pycache__/
+venv/

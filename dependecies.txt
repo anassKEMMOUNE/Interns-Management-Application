@@ -1,0 +1,8 @@
+Do venv and then install the following:  
+
+Tesseract  brew install tesseract
+PyPDF2 pip
+docx pip
+nltk pip
+unidecode pip
+flask pip

@@ -1,0 +1,39 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/navbar.css') }}">
+<nav class="navbar">
+    <div class="navbar-logo">
+        <img src="{{ url_for('static', filename='img/InnovxLogo.jpeg') }}" alt="Logo">
+    </div>
+    <ul class="navbar-nav">
+        <li class="nav-item" id="dashboard">
+            <a href="/"><i class="icon-dashboard"></i> Dashboard</a>
+        </li>
+        <li class="nav-item" id="cvfilter">
+            <a href="/cvfilter"><i class="icon-cvs"></i> CV Filtering</a>
+        </li>
+        <li class="nav-item" id="calendar">
+            <a href="#"><i class="icon-calendar"></i> Calendar</a>
+        </li>
+        <li class="nav-item" id="feedback">
+            <a href="#"><i class="icon-feedback"></i> Feedback Forms</a>
+        </li>
+        <li class="nav-item" id="emails">
+            <a href="/emails"><i class="icon-emails"></i> Automatic emails</a>
+        </li>
+        <li class="nav-item" id="settings">
+            <a href="/settings"><i class="icon-settings"></i> Settings</a>
+        </li>
+        <li class="nav-item" id="logout">
+            <a class="logout" href="{{ url_for('login') }}"><i class="icon-logout"></i> Logout</a>
+        </li>
+    </ul>
+</nav>
+<script>
+    // Get the current URL path
+    var path = window.location.pathname;
+
+    // Extract the page name from the URL
+    var page = path.split('/').pop();
+
+    // Add 'active' class to the corresponding nav item
+    document.getElementById(page).classList.add('active');
+</script>

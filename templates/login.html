@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+
+</head>
+<body>
+    <div class="container">
+      <img src="{{ url_for('static', filename='img/InnovxLogo.jpeg') }}" alt="Company Logo" class="logo">
+      <div class="login-box">
+        <div class="sign-in">Sign In</div>
+        <div class="form-group">
+          <form action="{{ url_for('login') }}" method="POST">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" required>
+        </div>
+        <div class="form-group">
+            <div class="password-container">
+                <label for="password" class="password-label">Password</label>
+                <span class="password-toggle" onclick="togglePassword()">Show Password</span>
+              </div>
+              <input type="password" id="password" name= "password" class="form-control" placeholder="Enter your password">
+              
+              
+        </div>
+        <button type = "submit" class="btn-login">Login</button>
+        {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+      </form>
+        <div class="forgot-password">Forgot Password?</div>
+      </div>
+    </div>
+  
+    <script>
+      function togglePassword() {
+        var passwordField = document.getElementById("password");
+        if (passwordField.type === "password") {
+          passwordField.type = "text";
+          document.querySelector('.password-toggle').textContent = 'Hide Password';
+        } else {
+          passwordField.type = "password";
+          document.querySelector('.password-toggle').textContent = 'Show Password';
+        }
+      }
+    </script>
+  </body>
+  
+</html>
