@@ -161,6 +161,13 @@ def emails():
     return render_template("emails.html")
 
 
+@app.route('/calendar')
+def calendars():
+    if "email" not in session:
+        return redirect(url_for('login'))
+
+    return render_template("calendar.html")
+
 
 
 if __name__ == '__main__':

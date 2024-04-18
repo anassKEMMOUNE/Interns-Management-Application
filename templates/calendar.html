@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>Calendar</title>
+    <style>
+        /* Updated CSS for styling the calendar */
+        .calendar {
+            border: 1px solid #ccc;
+            width: 90%;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+        .calendar-header {
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .calendar-header button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            outline: none;
+        }
+        .calendar-header button:hover {
+            color: #333;
+        }
+        .calendar-month-year {
+            font-size: 24px;
+            font-weight: bold;
+            flex-grow: 1;
+        }
+        .calendar-body {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border-top: 1px solid #ccc;
+        }
+        .calendar-day {
+            border: 1px solid #ccc;
+            padding: 5px;
+            height: 100px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .current-day {
+            background-color: #f0f0f0 !important;
+        }
+        .event-marker {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            font-size: 10px;
+            color: #555;
+        }
+        .day-name {
+            border-bottom: 1px solid #ccc;
+            padding: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    {% include "navbar.html" %}
+    <div class="main-container">
+        <h1> Actions Calendar</h1>
+
+        <div class="calendar">
+            <div class="calendar-header">
+                <button id="prevMonthBtn">&lt;</button>
+                <span class="calendar-month-year" id="currentMonthYear"></span>
+                <button id="nextMonthBtn">&gt;</button>
+            </div>
+            <div class="calendar-body" id="calendarBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for creating the calendar
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarBody = document.getElementById('calendarBody');
+            const currentMonthYear = document.getElementById('currentMonthYear');
+            const prevMonthBtn = document.getElementById('prevMonthBtn');
+            const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+            let currentDate = new Date();
+            let currentMonth = currentDate.getMonth();
+            let currentYear = currentDate.getFullYear();
+
+            function renderCalendar() {
+                // Clear previous calendar
+                calendarBody.innerHTML = '';
+
+                // Set current month and year
+                currentMonthYear.textContent = `${new Intl.DateTimeFormat('en-US', { month: 'long' }).format(currentDate)} ${currentYear}`;
+
+                // Create and append day names
+                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                dayNames.forEach(day => {
+                    let dayNameCell = document.createElement('div');
+                    dayNameCell.textContent = day;
+                    dayNameCell.classList.add('day-name');
+                    calendarBody.appendChild(dayNameCell);
+                });
+
+                // Get the first day of the month
+                let firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+                let startingDay = firstDayOfMonth.getDay();
+
+                // Get the number of days in the month
+                let daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+                // Create calendar cells
+                for (let i = 0; i < startingDay; i++) {
+                    let emptyCell = document.createElement('div');
+                    emptyCell.classList.add('calendar-day');
+                    calendarBody.appendChild(emptyCell);
+                }
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                    let calendarDay = document.createElement('div');
+                    calendarDay.textContent = i;
+                    calendarDay.classList.add('calendar-day');
+                    if (currentDate.getDate() === i && currentDate.getMonth() === currentMonth && currentDate.getFullYear() === currentYear) {
+                        calendarDay.classList.add('current-day');
+                    }
+                    calendarDay.addEventListener('click', function() {
+                        // Handle click event for calendar day
+                        let selectedDate = new Date(currentYear, currentMonth, i);
+                        alert(`Clicked on ${selectedDate.toLocaleDateString()}`);
+                    });
+                    calendarBody.appendChild(calendarDay);
+                }
+            }
+
+            // Initial rendering of the calendar
+            renderCalendar();
+
+            // Event listeners for navigating months
+            prevMonthBtn.addEventListener('click', function() {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                currentDate = new Date(currentYear, currentMonth);
+                renderCalendar();
+            });
+
+            nextMonthBtn.addEventListener('click', function() {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                currentDate = new Date(currentYear, currentMonth);
+                renderCalendar();
+            });
+        });
+    </script>
+</body>
+</html>
