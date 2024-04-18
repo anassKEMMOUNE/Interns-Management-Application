@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-
     <title>Add User</title>
-
 </head>
 <body>
     {% include "navbar.html"  %}
@@ -47,6 +45,9 @@
     
             <label for="password">Password:</label><br>
             <input type="password" id="password" name="password" required><br>
+            
+            <label for="birthday">Birthday:</label><br>
+            <input type="date" id="birthday" name="birthday"><br> 
     
             <label for="is_admin">Admin:</label>
             <input type="checkbox" id="is_admin" name="is_admin"><br>
@@ -54,7 +55,5 @@
             <input type="submit" value="Add User">
         </form>
     </div>
-
-  
 </body>
 </html>

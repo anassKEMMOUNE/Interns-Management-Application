@@ -95,27 +95,27 @@ def settings():
             else :
                 return render_template("settings.html", error = "wrong old password")
 
-
-
         elif action == 'add_user':
             email = request.form['email']
             name = request.form['name']
             lastname = request.form['lastname']
             password = request.form['password']
             password = hashlib.sha256(password.encode()).hexdigest()
-            is_admin = request.form.get('is_admin') == 'on'  # Checkbox handling
+            is_admin = request.form.get('is_admin') == 'on'  
+            birthday = request.form.get('birthday')  
 
             conn = User.connect_to_database("database.db")
             existing_user = User.get_user(conn, email)
             if existing_user:
                 return render_template('settings.html', error1='User already exists with this email.')
 
-            new_user = User(email, name, lastname, password, is_admin)
+            new_user = User(email, name, lastname, password, is_admin, birthday=birthday)  
             new_user.add_user(conn)
 
             return redirect(url_for('index'))
 
     return render_template('settings.html')
+
 
 
 @app.route('/cvfilter')

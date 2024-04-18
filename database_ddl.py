@@ -1,20 +1,29 @@
 import sqlite3
 import hashlib
+
 # To run once on activation
 
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
-c.execute('''DROP TABLE User''')
+
+# Drop existing User table if it exists
+c.execute('''DROP TABLE IF EXISTS User''')
+
+# Create User table with the new birthday field
 c.execute('''CREATE TABLE IF NOT EXISTS User (
                 email TEXT PRIMARY KEY,
                 name TEXT,
                 lastname TEXT,
                 password TEXT,
+                birthday DATE,
                 is_admin INTEGER
             )''')
+
+# Commit changes and close connection
 conn.commit()
 conn.close()
 
+# Connect to database again to insert initial admin user
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
@@ -22,8 +31,8 @@ c = conn.cursor()
 hashed_password = hashlib.sha256('admin'.encode()).hexdigest()
 
 # Insert admin user into the User table
-c.execute("INSERT INTO User (email, name, lastname, password, is_admin) VALUES (?, ?, ?, ?, ?)",
-          ('admin@admin.com', 'admin', 'user', hashed_password,1))
+c.execute("INSERT INTO User (email, name, lastname, password, birthday, is_admin) VALUES (?, ?, ?, ?, ?, ?)",
+          ('admin@admin.com', 'admin', 'user', hashed_password, None, 1))
 
 # Commit changes and close connection
 conn.commit()
