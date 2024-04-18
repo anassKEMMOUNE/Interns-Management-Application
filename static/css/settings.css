@@ -1,0 +1,71 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+}
+
+.main-container {
+    width: 450px; /* Adjust maximum width */
+    padding: 20px; /* Adjust padding */
+    margin: 20px;
+    margin-left: 450px; /* Adjust this to the width of your navbar */
+
+    border: 2px solid black;
+    border-radius: 20px;
+    background-color: #ffffff;
+}
+
+h1 {
+    font-size: 24px; /* Reduce font size */
+    font-weight: bold;
+    color: black;
+    margin-bottom: 20px; /* Reduce margin */
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px; /* Reduce margin */
+}
+
+form {
+    width: 100%; /* Make form width 100% */
+}
+
+label {
+    font-size: 18px; /* Reduce font size */
+    color: #a4a4a4;
+    margin-bottom: 5px; /* Reduce margin */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="submit"],
+input[type="checkbox"] {
+    width: calc(100% - 20px); /* Adjust input width */
+    padding: 10px;
+    font-size: 16px; /* Reduce font size */
+    border: 1px solid #a4a4a4;
+    border-radius: 4px;
+    margin-bottom: 10px; /* Reduce margin */
+}
+
+input[type="submit"] {
+    font-size: 18px; /* Adjust font size */
+    padding: 12px;
+}
+
+@media (min-width: 768px) {
+    .main-container {
+        max-width: 500px; /* Adjust maximum width for larger screens */
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="submit"],
+    input[type="checkbox"] {
+        width: 400px; /* Adjust input width for larger screens */
+    }
+}
