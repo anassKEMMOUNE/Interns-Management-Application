@@ -5,4 +5,6 @@ PyPDF2 pip
 docx pip
 nltk pip
 unidecode pip
-flask pip
+flasmk pip
+mammoth pip
+source venv/bin/activate

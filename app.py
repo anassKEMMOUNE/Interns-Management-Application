@@ -37,7 +37,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     save_files([])
-    if "email" in session or "keywords" in session :
+    if "email" in session :
         del session["email"]
 
     if "keywords" in session :
@@ -69,29 +69,54 @@ def login():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
-    if "email" not in session :
+    if "email" not in session:
         return redirect(url_for('login'))
+
     if request.method == 'POST':
-        email = request.form['email']
-        name = request.form['name']
-        lastname = request.form['lastname']
-        password = request.form['password']
-        password = hashlib.sha256(password.encode()).hexdigest()
-        is_admin = request.form.get('is_admin') == 'on'  # Checkbox handling
-        print(is_admin," is_admin")
-        conn = User.connect_to_database("database.db")
-        # Check if the user already exists
-        existing_user = User.get_user(conn, email)
-        if existing_user:
-            return render_template('settings.html', error='User already exists with this email.')
+        action = request.form['action']  # Get the action from the form
 
-        # Create a new user object and add it to the database
-        new_user = User(email, name, lastname, password, is_admin)
-        new_user.add_user(conn)
+        if action == 'change_password':
+            old_password = request.form['oldpassword']
+            new_password = request.form['newpassword']
+            confirm_password = request.form['confirmpassword']
 
-        return redirect(url_for('index'))
+            hashed_old = hashlib.sha256(old_password.encode()).hexdigest()
+            conn = User.connect_to_database("database.db")
+            user = User.get_user(conn,session["email"])
+
+            if hashed_old == user.password :
+                if new_password == confirm_password :
+                    hashed_new = hashlib.sha256(new_password.encode()).hexdigest()
+                    User.modify_user(conn,session["email"],password = hashed_new)
+                    return redirect(url_for('login'))
+                else :
+                    return render_template("settings.html",error = "password not matching")
+
+            else :
+                return render_template("settings.html", error = "wrong old password")
+
+
+
+        elif action == 'add_user':
+            email = request.form['email']
+            name = request.form['name']
+            lastname = request.form['lastname']
+            password = request.form['password']
+            password = hashlib.sha256(password.encode()).hexdigest()
+            is_admin = request.form.get('is_admin') == 'on'  # Checkbox handling
+
+            conn = User.connect_to_database("database.db")
+            existing_user = User.get_user(conn, email)
+            if existing_user:
+                return render_template('settings.html', error1='User already exists with this email.')
+
+            new_user = User(email, name, lastname, password, is_admin)
+            new_user.add_user(conn)
+
+            return redirect(url_for('index'))
 
     return render_template('settings.html')
+
 
 @app.route('/cvfilter')
 def cvfilter():

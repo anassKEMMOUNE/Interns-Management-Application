@@ -11,11 +11,31 @@
 <body>
     {% include "navbar.html"  %}
     <div class="main-container">
-        <h1>Add User</h1>
+        <h1>Change password</h1>
         {% if error %}
             <p style="color: red;">{{ error }}</p>
         {% endif %}
         <form method="POST" action="{{ url_for('settings') }}">
+            <input type="hidden" name="action" value="change_password">
+            <label for="oldpassword">Old password : </label><br>
+            <input type="password" id="oldpassword" name="oldpassword" required><br>
+
+            <label for="newpassword">New password:</label><br>
+            <input type="password" id="newpassword" name="newpassword" required><br>
+
+            <label for="confirmpassword">Confirm new password:</label><br>
+            <input type="password" id="confirmpassword" name="confirmpassword" required><br>
+
+            <input type="submit" value="Change password">
+        </form>
+    </div>
+    <div class="main-container">
+        <h1>Add User</h1>
+        {% if error %}
+            <p style="color: red;">{{ error1 }}</p>
+        {% endif %}
+        <form method="POST" action="{{ url_for('settings') }}">
+            <input type="hidden" name="action" value="add_user">
             <label for="email">Email:</label><br>
             <input type="email" id="email" name="email" required><br>
     

@@ -1,0 +1,118 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2; /* Setting the background color for the body */
+}
+
+.navbar {
+    width: 450px; /* Increased navbar width */
+    height: 100vh;
+    background-color: #fff; /* Changed to white background as per the screenshot */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Adding a subtle shadow for depth */
+}
+
+.navbar-logo {
+    padding: 20px;
+    width: 100%; /* Ensure the logo uses the full width of the navbar */
+    display: flex; /* Added for centering the logo if necessary */
+    justify-content: center; /* Center logo horizontally */
+}
+
+.navbar-logo img {
+    max-width: 100%; /* Make sure the logo is responsive and fits well within the navbar */
+    height: auto;
+}
+
+.navbar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.nav-item {
+    width: 100%;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    height: 90px; /* Increased height for each nav item */
+    color: #333; /* Changed the text color for better contrast */
+    text-decoration: none;
+    font-size: 30px; /* Increased font size */
+    padding-left: 30px; /* Adjusted padding to accommodate larger text */
+    border-left: 4px solid transparent; /* Added for potential active state indicator */
+    transition: background-color 0.3s; /* Smooth transition for hover effects */
+}
+
+.nav-item a i {
+    margin-right: 10px; /* Adjust icon size and spacing */
+    background-size: cover;
+    width: 24px; /* Adjust as needed */
+    height: 24px; /* Adjust as needed */
+}
+.nav-item.active a,
+.nav-item a:hover {
+    background-color: #e7e7e7; /* Lighter shade for hover and active states */
+    border-left: 4px solid #0056b3; /* Blue bar for active state */
+}
+
+/* Icons should have individual classes with their background-images set accordingly */
+
+.navbar-help {
+    margin-bottom: 20px;
+    width: 100%; /* Ensure the help link uses the full width of the navbar */
+    display: flex; /* Added for centering the help link if necessary */
+    justify-content: center; /* Center help link horizontally */
+}
+
+.navbar-help a {
+    color: #333;
+    text-decoration: none;
+    font-size: 20px; /* Increased font size for the help link */
+    padding: 10px 0; /* Added padding for spacing */
+}
+
+.icon-help {
+    /* Assuming you're using a separate help icon */
+    margin-right: 15px;
+    width: 30px; /* Increased icon size */
+    height: 30px; /* Increased icon size */
+}
+
+/* Additional styles for hover effects and active state */
+.nav-item a:hover, .navbar-help a:hover {
+    text-decoration: none;
+    background-color: #f7f7f7;
+}
+
+.nav-item.active a {
+    font-weight: bold; /* Make the active link bold */
+}
+.icon-dashboard {
+    background-image: url('../img/dash.png'); /* Path to dashboard icon */
+}
+.icon-cvs {
+    background-image: url('../img/cvicon.png'); /* Path to CVs icon */
+}
+.icon-calendar{
+    background-image:  url('../img/calendaricon.png');
+}
+.icon-feedback{
+    background-image:  url('../img/feedbackicon.png');
+}
+.icon-emails{
+    background-image:  url(../img/emailicon.png);
+}
+.icon-settings{
+    background-image: url('../img/settingsicon.png');
+}
