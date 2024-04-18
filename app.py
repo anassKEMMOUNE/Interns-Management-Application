@@ -29,14 +29,18 @@ def save_files(files):
 
 @app.route('/')
 def index():
+    if "email" not in session :
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     save_files([])
-    if "email" in session :
+    if "email" in session or "keywords" in session :
         del session["email"]
+
+    if "keywords" in session :
         del session["keywords"]
     if request.method == 'POST':
         email = request.form['email']
@@ -65,6 +69,8 @@ def login():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
+    if "email" not in session :
+        return redirect(url_for('login'))
     if request.method == 'POST':
         email = request.form['email']
         name = request.form['name']
@@ -89,6 +95,8 @@ def settings():
 
 @app.route('/cvfilter')
 def cvfilter():
+    if "email" not in session :
+        return redirect(url_for('login'))
     filtered_resumes =  []
     if len(os.listdir('Resumes'))>0:
         keywords = session.get('keywords', [])
@@ -100,6 +108,8 @@ def cvfilter():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    if "email" not in session :
+        return redirect(url_for('login'))
     if 'files[]' not in request.files:
         return redirect(request.url)
 
@@ -120,6 +130,9 @@ def upload():
 
 @app.route('/emails')
 def emails():
+    if "email" not in session :
+        return redirect(url_for('login'))
+    
     return render_template("emails.html")
 
 
