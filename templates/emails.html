@@ -5,50 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-
 </head>
 <body>
     {% include "navbar.html" %}
     <div class="main-container">
         <div class="content-container">
-            <form id="uploadForm" enctype="multipart/form-data">
-            <div class="upload-cvs">
-                <h2>Send automatic emails</h2>
-                <div class="file-upload">
-
-                        <input type="text" id="filename" class="file-name" placeholder="No file chosen" readonly>
-                        <input type="file" id="fileInput" style="display: none;" />
-                        <button type="button" id="browseButton" class="btn-upload">Browse</button>
-                        
-                    
-                </div>
-            </div>
-            <button type="submit" id="uploadButton">Filter</button>
-        </form>
- 
-
+            <h2>Send Automatic Emails</h2>
             <table class="cv-table">
                 <thead>
                     <tr>
-                        <th>Employee ID</th>
-                        <th>Employee</th>
-                        <th>Birthday</th>
                         <th>Email</th>
+                        <th>Name</th>
+                        <th>Last Name</th>
+                        <th>Birthday</th>
                     </tr>
                 </thead>
                 <tbody id="cvTableBody">
-                    {% for file_name in files %}
+                    {% for user in users %}
                         <tr>
-                            <td></td> <!-- Empty candidate ID -->
-                            <td></td> <!-- Empty candidate name -->
-                            <td>{{ file_name }}</td> <!-- File name -->
-                            <td><button class="btn-remove">remove</button></td> <!-- Remove button -->
+                            <td>{{ user['email'] }}</td>
+                            <td>{{ user['name'] }}</td>
+                            <td>{{ user['lastname'] }}</td>
+                            <td>{{ user['birthday'] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-
 </body>
 </html>

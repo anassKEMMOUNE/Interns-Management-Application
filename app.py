@@ -5,9 +5,12 @@ from Models.user import User
 import os
 import CVfilter.extraction 
 from CVfilter.Filtering import filterAll
+import json
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
 
 def save_files(files):
     # Define the directory to save the files
@@ -102,14 +105,14 @@ def settings():
             password = request.form['password']
             password = hashlib.sha256(password.encode()).hexdigest()
             is_admin = request.form.get('is_admin') == 'on'  
-            birthday = request.form.get('birthday')  
+            birthday = request.form.get('birthday')
 
             conn = User.connect_to_database("database.db")
             existing_user = User.get_user(conn, email)
             if existing_user:
                 return render_template('settings.html', error1='User already exists with this email.')
 
-            new_user = User(email, name, lastname, password, is_admin, birthday=birthday)  
+            new_user = User(email, name, lastname, password, is_admin, birthday=birthday)
             new_user.add_user(conn)
 
             return redirect(url_for('index'))
@@ -153,21 +156,63 @@ def upload():
         return f"An error occurred: {str(e)}"
     
 
+
 @app.route('/emails')
 def emails():
-    if "email" not in session :
+    if "email" not in session:
         return redirect(url_for('login'))
-    
-    return render_template("emails.html")
 
+    try:
+        # Retrieve all users excluding the admin user
+        user_data = User.get_all_users(exclude_admin=True)
+
+        # Pass user data to the template
+        print(user_data)
+        return render_template("emails.html", users=user_data)
+
+
+    except Exception as e:
+        return render_template("error.html", error=str(e))
+
+import json
 
 @app.route('/calendar')
 def calendars():
     if "email" not in session:
         return redirect(url_for('login'))
 
-    return render_template("calendar.html")
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
 
+        # Query all entries from the Calendar table
+        c.execute("SELECT * FROM Calendar")
+        entries = c.fetchall()
+
+        # Close connection
+        conn.close()
+
+        # Convert entries to a dictionary with date as key
+        calendar_data = {}
+        for entry in entries:
+            date = entry[0]
+            if date not in calendar_data:
+                calendar_data[date] = []
+            calendar_data[date].append({
+                'title': entry[1],
+                'description': entry[2]
+            })
+
+        # Save calendar data to a JSON file
+        with open('static/json/calendar_data.json', 'w') as json_file:
+            json.dump(calendar_data, json_file)
+
+        # Render the template
+        return render_template("calendar.html")
+
+    except Exception as e:
+        return render_template("error.html", error=str(e))
 
 
 if __name__ == '__main__':

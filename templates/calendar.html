@@ -54,9 +54,9 @@
         }
         .event-marker {
             position: absolute;
-            bottom: 5px;
-            left: 5px;
-            font-size: 10px;
+            bottom: 42px;
+            left: 51px;
+            font-size: 14px;
             color: #555;
         }
         .day-name {
@@ -69,7 +69,7 @@
 <body>
     {% include "navbar.html" %}
     <div class="main-container">
-        <h1> Actions Calendar</h1>
+        <h1>Actions Calendar</h1>
 
         <div class="calendar">
             <div class="calendar-header">
@@ -80,89 +80,117 @@
             <div class="calendar-body" id="calendarBody"></div>
         </div>
     </div>
+</body>
+<script>
+    // JavaScript for creating the calendar
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarBody = document.getElementById('calendarBody');
+        const currentMonthYear = document.getElementById('currentMonthYear');
+        const prevMonthBtn = document.getElementById('prevMonthBtn');
+        const nextMonthBtn = document.getElementById('nextMonthBtn');
 
-    <script>
-        // JavaScript for creating the calendar
-        document.addEventListener('DOMContentLoaded', function() {
-            const calendarBody = document.getElementById('calendarBody');
-            const currentMonthYear = document.getElementById('currentMonthYear');
-            const prevMonthBtn = document.getElementById('prevMonthBtn');
-            const nextMonthBtn = document.getElementById('nextMonthBtn');
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
 
-            let currentDate = new Date();
-            let currentMonth = currentDate.getMonth();
-            let currentYear = currentDate.getFullYear();
 
-            function renderCalendar() {
-                // Clear previous calendar
-                calendarBody.innerHTML = '';
 
-                // Set current month and year
-                currentMonthYear.textContent = `${new Intl.DateTimeFormat('en-US', { month: 'long' }).format(currentDate)} ${currentYear}`;
+        // Load calendar data from JSON file
+        fetch('/static/json/calendar_data.json')
+            .then(response => response.json())
+            .then(calendarData => {
 
-                // Create and append day names
-                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                dayNames.forEach(day => {
-                    let dayNameCell = document.createElement('div');
-                    dayNameCell.textContent = day;
-                    dayNameCell.classList.add('day-name');
-                    calendarBody.appendChild(dayNameCell);
+
+                function renderCalendar() {
+                    // Clear previous calendar
+                    calendarBody.innerHTML = '';
+
+                    // Set current month and year
+                    currentMonthYear.textContent = `${new Intl.DateTimeFormat('en-US', { month: 'long' }).format(currentDate)} ${currentYear}`;
+
+                    // Create and append day names
+                    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                    dayNames.forEach(day => {
+                        let dayNameCell = document.createElement('div');
+                        dayNameCell.textContent = day;
+                        dayNameCell.classList.add('day-name');
+                        calendarBody.appendChild(dayNameCell);
+                    });
+
+                    // Get the first day of the month
+                    let firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+                    let startingDay = firstDayOfMonth.getDay();
+
+                    // Get the number of days in the month
+                    let daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+                    // Create calendar cells for dates with events
+                    for (let i = 1; i <= daysInMonth; i++) {
+
+                        let cm = currentMonth +1;
+                        let y = i.toString();
+                        if (cm < 10){
+                                cm = "0" + cm.toString();
+                            }
+                        if (y<10){
+                            y =  "0" + y;
+                        }
+                        const currentDateKey = `${currentYear}-${cm}-${y}`;
+                        console.log(typeof currentMonth)
+                        const events = calendarData[currentDateKey.toString()] || [];
+
+                        if (events.length >= 0) {
+                            let calendarDay = document.createElement('div');
+                            calendarDay.textContent = i;
+                            calendarDay.classList.add('calendar-day');
+
+                            if (currentDate.getDate() === i && currentDate.getMonth() === currentMonth && currentDate.getFullYear() === currentYear) {
+                                calendarDay.classList.add('current-day');
+                            }
+
+                            const eventTitles = events.map(event => event.title).join(', ');
+                            const eventDescriptions = events.map(event => event.description).join(', ');
+                            const eventMarker = document.createElement('div');
+                            eventMarker.textContent = eventTitles;
+                            eventMarker.classList.add('event-marker');
+                            calendarDay.appendChild(eventMarker);
+
+                            calendarDay.addEventListener('click', function() {
+                                // Handle click event for calendar day
+                                let selectedDate = new Date(currentYear, currentMonth, i);
+                                alert(`${selectedDate.toLocaleDateString()}  \n  ${eventDescriptions}`);
+                            });
+                            calendarBody.appendChild(calendarDay);
+                        }
+                    }
+                    console.log(calendarData[2024 + "-"+ "05" + "-"+"05"][0]);
+                }
+
+                // Initial rendering of the calendar
+                renderCalendar();
+
+                // Event listeners for navigating months
+                prevMonthBtn.addEventListener('click', function() {
+                    currentMonth--;
+                    if (currentMonth < 0) {
+                        currentMonth = 11;
+                        currentYear--;
+                    }
+                    currentDate = new Date(currentYear, currentMonth);
+                    renderCalendar();
                 });
 
-                // Get the first day of the month
-                let firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-                let startingDay = firstDayOfMonth.getDay();
-
-                // Get the number of days in the month
-                let daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-                // Create calendar cells
-                for (let i = 0; i < startingDay; i++) {
-                    let emptyCell = document.createElement('div');
-                    emptyCell.classList.add('calendar-day');
-                    calendarBody.appendChild(emptyCell);
-                }
-
-                for (let i = 1; i <= daysInMonth; i++) {
-                    let calendarDay = document.createElement('div');
-                    calendarDay.textContent = i;
-                    calendarDay.classList.add('calendar-day');
-                    if (currentDate.getDate() === i && currentDate.getMonth() === currentMonth && currentDate.getFullYear() === currentYear) {
-                        calendarDay.classList.add('current-day');
+                nextMonthBtn.addEventListener('click', function() {
+                    currentMonth++;
+                    if (currentMonth > 11) {
+                        currentMonth = 0;
+                        currentYear++;
                     }
-                    calendarDay.addEventListener('click', function() {
-                        // Handle click event for calendar day
-                        let selectedDate = new Date(currentYear, currentMonth, i);
-                        alert(`Clicked on ${selectedDate.toLocaleDateString()}`);
-                    });
-                    calendarBody.appendChild(calendarDay);
-                }
-            }
-
-            // Initial rendering of the calendar
-            renderCalendar();
-
-            // Event listeners for navigating months
-            prevMonthBtn.addEventListener('click', function() {
-                currentMonth--;
-                if (currentMonth < 0) {
-                    currentMonth = 11;
-                    currentYear--;
-                }
-                currentDate = new Date(currentYear, currentMonth);
-                renderCalendar();
-            });
-
-            nextMonthBtn.addEventListener('click', function() {
-                currentMonth++;
-                if (currentMonth > 11) {
-                    currentMonth = 0;
-                    currentYear++;
-                }
-                currentDate = new Date(currentYear, currentMonth);
-                renderCalendar();
-            });
-        });
-    </script>
-</body>
+                    currentDate = new Date(currentYear, currentMonth);
+                    renderCalendar();
+                });
+            })
+            .catch(error => console.error('Error loading calendar data:', error));
+    });
+</script>
 </html>

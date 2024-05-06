@@ -1,5 +1,5 @@
 import sqlite3
-
+import json
 class User:
     def __init__(self, email, name, lastname, password, is_admin, birthday=None):
         self.email = email
@@ -64,3 +64,31 @@ class User:
                 return None
         except sqlite3.Error as e:
             print("Error fetching user:", e)
+
+    @staticmethod
+    def get_all_users(exclude_admin=True):
+        """Retrieve all users from the database."""
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+
+        if exclude_admin:
+            c.execute("SELECT email, name, lastname, birthday, is_admin FROM User WHERE email != 'admin@admin.com'")
+        else:
+            c.execute("SELECT email, name, lastname, birthday, is_admin FROM User")
+
+        users = c.fetchall()
+        print("useeers   ",users)
+        conn.close()
+
+        user_list = []
+        for user in users:
+            if user[0]!="admin@admin.com":
+                user_list.append({
+                    'email': user[0],
+                    'name': user[1],
+                    'lastname': user[2],
+                    'birthday': user[4],
+                })
+
+        return user_list
+
