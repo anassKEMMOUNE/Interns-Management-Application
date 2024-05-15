@@ -1,5 +1,6 @@
 import sqlite3
 import json
+import os
 class User:
     def __init__(self, email, name, lastname, password, is_admin, birthday=None):
         self.email = email
@@ -68,7 +69,7 @@ class User:
     @staticmethod
     def get_all_users(exclude_admin=True):
         """Retrieve all users from the database."""
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect(os.path.abspath("") +'/database.db')
         c = conn.cursor()
 
         if exclude_admin:
@@ -92,3 +93,5 @@ class User:
 
         return user_list
 
+
+print(os.path.abspath(""))

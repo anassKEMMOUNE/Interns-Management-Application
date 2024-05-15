@@ -20,7 +20,7 @@ def filterAll(directory : str, keywords : list = []) :
     filtered = []
     resumes =  os.listdir(directory)
     if len(resumes) == 0 :
-        return "Empty directory"
+        return []
     for res in resumes :
         print("Searching in resume : ",res)
         if (res.split(".")[-1] == "pdf") :
@@ -38,8 +38,8 @@ def filterAll(directory : str, keywords : list = []) :
 
     return filtered
 
-print(filterAll("Resumes",keywords=['PHP',"blockchain"]))
-print(filterAll("Resumes",keywords=['PHP']))
+# print(filterAll("Resumes",keywords=['PHP',"blockchain"]))
+# print(filterAll("Resumes",keywords=['PHP']))
 
 
     

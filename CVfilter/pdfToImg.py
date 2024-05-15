@@ -29,10 +29,10 @@ def pdf_to_png(pdf_path, output_folder=None, prefix=None):
     return png_paths
 
 # Example usage:
-pdf_path = "example.pdf"
-output_folder = "output_images"
-prefix = "converted_"
-png_paths = pdf_to_png(pdf_path, output_folder, prefix)
-print("PNG images saved at:")
-for png_path in png_paths:
-    print(png_path)
+# pdf_path = "example.pdf"
+# output_folder = "output_images"
+# prefix = "converted_"
+# png_paths = pdf_to_png(pdf_path, output_folder, prefix)
+# print("PNG images saved at:")
+# for png_path in png_paths:
+#     print(png_path)

@@ -54,7 +54,9 @@ c.execute('''CREATE TABLE IF NOT EXISTS Calendar (
 # Sample entries for demonstration
 sample_entries = [
     ('2024-05-05', 'Meeting', 'Discuss project timeline'),
-    ('2024-05-06', 'Work Party', 'Celebrate work party')
+    ('2024-05-06', 'Work Party', 'Celebrate work party'),
+    ('2024-05-31','anass','anass'),
+    ('2024-05-31','anass2','anass2')
 ]
 
 # Insert sample entries into the Calendar table

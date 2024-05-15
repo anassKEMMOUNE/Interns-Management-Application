@@ -1,5 +1,4 @@
 import os
-from docx import Document
 import mammoth
 import PyPDF2  
 from PIL import Image

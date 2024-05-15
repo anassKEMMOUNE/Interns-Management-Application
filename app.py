@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session,Response
+from flask import Flask, render_template, request, redirect, url_for, session,Response,send_from_directory
 import sqlite3
 import hashlib
 from Models.user import User
@@ -14,7 +14,7 @@ app.secret_key = 'your_secret_key'
 
 def save_files(files):
     # Define the directory to save the files
-    upload_directory = os.path.join(app.root_path, 'Resumes')
+    upload_directory = os.path.abspath("") +'/Resumes'
 
     # Empty the directory
     for file_name in os.listdir(upload_directory):
@@ -49,7 +49,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        conn = User.connect_to_database("database.db")
+        conn = User.connect_to_database(os.path.abspath("") +'/database.db')
         user = User.get_user(conn, email)
         
         if user:
@@ -84,7 +84,7 @@ def settings():
             confirm_password = request.form['confirmpassword']
 
             hashed_old = hashlib.sha256(old_password.encode()).hexdigest()
-            conn = User.connect_to_database("database.db")
+            conn = User.connect_to_database(os.path.abspath("") +'/database.db')
             user = User.get_user(conn,session["email"])
 
             if hashed_old == user.password :
@@ -107,7 +107,7 @@ def settings():
             is_admin = request.form.get('is_admin') == 'on'  
             birthday = request.form.get('birthday')
 
-            conn = User.connect_to_database("database.db")
+            conn = User.connect_to_database(os.path.abspath("") +'/database.db')
             existing_user = User.get_user(conn, email)
             if existing_user:
                 return render_template('settings.html', error1='User already exists with this email.')
@@ -126,9 +126,10 @@ def cvfilter():
     if "email" not in session :
         return redirect(url_for('login'))
     filtered_resumes =  []
-    if len(os.listdir('Resumes'))>0:
+    direct = os.path.abspath("") +'/Resumes'
+    if len(direct)>0:
         keywords = session.get('keywords', [])
-        filtered_resumes =  filterAll('Resumes',keywords)
+        filtered_resumes =  filterAll(direct,keywords)
 
     return render_template('cvfilter.html',files = filtered_resumes)
 
@@ -183,7 +184,7 @@ def calendars():
 
     try:
         # Connect to the SQLite database
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect(os.path.abspath("") +'/database.db')
         c = conn.cursor()
 
         # Query all entries from the Calendar table
@@ -205,7 +206,7 @@ def calendars():
             })
 
         # Save calendar data to a JSON file
-        with open('static/json/calendar_data.json', 'w') as json_file:
+        with open(os.path.abspath("")+'/static/json/calendar_data.json', 'w') as json_file:
             json.dump(calendar_data, json_file)
 
         # Render the template
@@ -213,6 +214,11 @@ def calendars():
 
     except Exception as e:
         return render_template("error.html", error=str(e))
+    
+
+@app.route('/resumes/<path:filename>')
+def get_resume(filename):
+    return send_from_directory('Resumes', filename)
 
 
 if __name__ == '__main__':

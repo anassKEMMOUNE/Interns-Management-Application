@@ -1,7 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: "Montserrat", sans-serif !important;
     background-color: #f2f2f2;
 }
 
@@ -65,9 +66,12 @@ body, html {
 }
 
 .cv-table {
-    width: 100%;
+    width: 50%;
     border-collapse: collapse;
+    margin: auto;
     margin-top: 20px;
+    text-align: center;
+
 }
 
 .cv-table thead {
@@ -76,7 +80,7 @@ body, html {
 
 .cv-table thead th {
     padding: 10px;
-    text-align: left;
+    text-align: center;
 }
 
 .cv-table tbody td {
@@ -118,60 +122,60 @@ body, html {
 }
 
 
-/* Updated CSS for styling the calendar */
-        .calendar {
-            border: 1px solid #ccc;
-            width: 90%;
-            margin: 0 auto;
-            font-family: Arial, sans-serif;
-        }
-        .calendar-header {
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .calendar-header button {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            outline: none;
-        }
-        .calendar-header button:hover {
-            color: #333;
-        }
-        .calendar-month-year {
-            font-size: 24px;
-            font-weight: bold;
-            flex-grow: 1;
-        }
-        .calendar-body {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            border-top: 1px solid #ccc;
-        }
-        .calendar-day {
-            border: 1px solid #ccc;
-            padding: 5px;
-            height: 100px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-        }
-        .current-day {
-            background-color: #f0f0f0 !important;
-        }
-        .event-marker {
-            position: absolute;
-            bottom: 5px;
-            left: 5px;
-            font-size: 10px;
-            color: #555;
-        }
-        .day-name {
-            border-bottom: 1px solid #ccc;
-            padding: 5px;
-            font-weight: bold;
-        }
+.calendar {
+    border: 1px solid #ccc;
+    width: 90%;
+    margin: 0 auto;
+}
+.calendar-header {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.calendar-header button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    outline: none;
+}
+.calendar-header button:hover {
+    color: #333;
+}
+.calendar-month-year {
+    font-size: 24px;
+    font-weight: bold;
+    flex-grow: 1;
+}
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-top: 1px solid #ccc;
+}
+.calendar-day {
+    border: 1px solid #ccc;
+    padding: 5px;
+    height: 100px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    
+}
+.current-day {
+    background-color: #f0f0f0 !important;
+}
+.event-marker {
+    position: absolute;
+    bottom: 42px;
+    left: 51px;
+    font-size: 14px;
+    color: #555;
+}
+.day-name {
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+    font-weight: bold;
+    margin: auto;
+}

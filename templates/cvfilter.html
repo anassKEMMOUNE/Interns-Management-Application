@@ -40,18 +40,14 @@
                 <thead>
                     <tr>
                         <th>Candidate ID</th>
-                        <th>Candidate</th>
-                        <th>Resume</th>
                         <th>Filter</th>
                     </tr>
                 </thead>
                 <tbody id="cvTableBody">
                     {% for file_name in files %}
-                        <tr>
-                            <td></td> <!-- Empty candidate ID -->
-                            <td></td> <!-- Empty candidate name -->
-                            <td>{{ file_name }}</td> <!-- File name -->
-                            <td><button class="btn-remove">remove</button></td> <!-- Remove button -->
+                        <tr class ="{{ file_name }}">
+                            <td ><a href="{{ url_for('get_resume', filename=file_name) }}" target="_blank">{{ file_name }}</a></td> <!-- File name -->
+                            <td><button class="btn-remove {{ file_name }}">remove</button></td> <!-- Remove button -->
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -112,6 +108,13 @@
                 keywordInput.value = ''; // Clear input field
                 keywords.push(keyword);
         }});
+
+
+        document.getElementsByClassName("btn_remove").forEach(button => {
+            console.log(button.classList[1]);
+        });  
+
+        document.getElementsByClassName("btn_remove")
     </script>
 </body>
 </html>
