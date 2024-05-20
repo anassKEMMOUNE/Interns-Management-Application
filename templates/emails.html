@@ -10,23 +10,25 @@
     {% include "navbar.html" %}
     <div class="main-container">
         <div class="content-container">
-            <h2>Send Automatic Emails</h2>
-            <table class="cv-table">
+            <h2>Users Birthdays</h2>
+            <table class="email-table">
                 <thead>
                     <tr>
                         <th>Email</th>
                         <th>Name</th>
                         <th>Last Name</th>
                         <th>Birthday</th>
+                        <th>Days Left to Birthday</th>
                     </tr>
                 </thead>
-                <tbody id="cvTableBody">
+                <tbody id="emailTableBody">
                     {% for user in users %}
                         <tr>
                             <td>{{ user['email'] }}</td>
                             <td>{{ user['name'] }}</td>
                             <td>{{ user['lastname'] }}</td>
                             <td>{{ user['birthday'] }}</td>
+                            <td>{{ user['left_to_birthday'] }} days</td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -45,9 +45,9 @@
                 </thead>
                 <tbody id="cvTableBody">
                     {% for file_name in files %}
-                        <tr class ="{{ file_name }}">
+                        <tr id ="{{ file_name }}">
                             <td ><a href="{{ url_for('get_resume', filename=file_name) }}" target="_blank">{{ file_name }}</a></td> <!-- File name -->
-                            <td><button class="btn-remove {{ file_name }}">remove</button></td> <!-- Remove button -->
+                            <td ><button class="btn-remove {{ file_name }}">remove</button></td> <!-- Remove button -->
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -110,11 +110,20 @@
         }});
 
 
-        document.getElementsByClassName("btn_remove").forEach(button => {
-            console.log(button.classList[1]);
-        });  
+        document.addEventListener("DOMContentLoaded", function() {
+    // Add click event listener to all remove buttons
+    document.querySelectorAll(".btn-remove").forEach(function(button) {
+        button.addEventListener("click", function() {
+            // Get the parent tr element and remove it
+            var tr = this.closest("tr");
+            if (tr) {
+                tr.remove();
+            }
+        });
+    });
+});
 
-        document.getElementsByClassName("btn_remove")
+        
     </script>
 </body>
 </html>

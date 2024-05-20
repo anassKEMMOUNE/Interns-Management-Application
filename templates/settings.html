@@ -8,52 +8,69 @@
 </head>
 <body>
     {% include "navbar.html"  %}
-    <div class="main-container">
-        <h1>Change password</h1>
-        {% if error %}
-            <p style="color: red;">{{ error }}</p>
+    <section>
+        <div class="main-container">
+            <h1>Change password</h1>
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% endif %}
+            <form method="POST" action="{{ url_for('settings') }}">
+                <input type="hidden" name="action" value="change_password">
+                <label for="oldpassword">Old password : </label><br>
+                <input type="password" id="oldpassword" name="oldpassword" required><br>
+    
+                <label for="newpassword">New password:</label><br>
+                <input type="password" id="newpassword" name="newpassword" required><br>
+    
+                <label for="confirmpassword">Confirm new password:</label><br>
+                <input type="password" id="confirmpassword" name="confirmpassword" required><br>
+    
+                <input type="submit" value="Change password">
+            </form>
+        </div>
+        {% if session["admin"] %}
+        <div class="main-container">
+            <h1>Add User</h1>
+            {% if error %}
+                <p style="color: red;">{{ error1 }}</p>
+            {% endif %}
+            <form method="POST" action="{{ url_for('settings') }}">
+                <input type="hidden" name="action" value="add_user">
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required><br>
+        
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" required><br>
+        
+                <label for="lastname">Last Name:</label><br>
+                <input type="text" id="lastname" name="lastname" required><br>
+        
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password" required><br>
+                
+                <label for="birthday">Birthday:</label><br>
+                <input type="date" id="birthday" name="birthday"><br> 
+        
+                <label for="is_admin">Admin:</label>
+                <input type="checkbox" id="is_admin" name="is_admin"><br>
+        
+                <input type="submit" value="Add User">
+            </form>
+        </div>
+        
+        <div class="main-container">
+            <h1>Upload CSV containing multiple users informations</h1>
+            <form action="{{ url_for('settings') }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add_multi_users">
+                <label for="csv_file">Select CSV file:</label>
+                <input type="file" id="csv_file" name="csv_file" accept=".csv" required>
+                <br>
+                <button type="submit">Upload</button>
+            </form>
+
+        </div>
         {% endif %}
-        <form method="POST" action="{{ url_for('settings') }}">
-            <input type="hidden" name="action" value="change_password">
-            <label for="oldpassword">Old password : </label><br>
-            <input type="password" id="oldpassword" name="oldpassword" required><br>
-
-            <label for="newpassword">New password:</label><br>
-            <input type="password" id="newpassword" name="newpassword" required><br>
-
-            <label for="confirmpassword">Confirm new password:</label><br>
-            <input type="password" id="confirmpassword" name="confirmpassword" required><br>
-
-            <input type="submit" value="Change password">
-        </form>
-    </div>
-    <div class="main-container">
-        <h1>Add User</h1>
-        {% if error %}
-            <p style="color: red;">{{ error1 }}</p>
-        {% endif %}
-        <form method="POST" action="{{ url_for('settings') }}">
-            <input type="hidden" name="action" value="add_user">
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br>
+    </section>
     
-            <label for="name">Name:</label><br>
-            <input type="text" id="name" name="name" required><br>
-    
-            <label for="lastname">Last Name:</label><br>
-            <input type="text" id="lastname" name="lastname" required><br>
-    
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br>
-            
-            <label for="birthday">Birthday:</label><br>
-            <input type="date" id="birthday" name="birthday"><br> 
-    
-            <label for="is_admin">Admin:</label>
-            <input type="checkbox" id="is_admin" name="is_admin"><br>
-    
-            <input type="submit" value="Add User">
-        </form>
-    </div>
 </body>
 </html>

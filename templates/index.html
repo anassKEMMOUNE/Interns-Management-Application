@@ -3,12 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
 
 
     <title>Index</title>
 </head>
 <body>
     {% include "navbar.html" %}
+    <div class="main-container">
+        <header>
+            <h2>Welcome <strong>{{ session["name"] }}</strong> </h2>
 
+        </header>
+        
+
+        <div class="content-container events-container">
+            <h3>Upcoming Events</h3>
+            <table id="eventsTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <div class="content-container">
+            <h3>Upcoming Birthdays </h3>
+            <table class="email-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Birthday</th>
+                        <th>Days Left to Birthday</th>
+                    </tr>
+                </thead>
+                <tbody id="emailTableBody">
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user['name'] }}  {{ user['lastname'] }}</td>
+                            <td>{{ user['birthday'] }}</td>
+                            <td>{{ user['left_to_birthday'] }} days</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    
+    <footer class="footer">
+        Made with ❤ by : Basma Arnaoui & Anass Kemmoune
+    </footer>
 </body>
+<script>
+    async function fetchEvents() {
+            try {
+                const response = await fetch("{{ url_for('static', filename='json/calendar_data.json') }}");
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const jsonData = await response.json();
+                return jsonData;
+            } catch (error) {
+                console.error('Failed to fetch events:', error);
+                return null;
+            }
+        }
+
+        function renderTable(data) {
+            const tbody = document.querySelector('#eventsTable tbody');
+            tbody.innerHTML = ''; // Clear the table body
+
+            data.forEach(entry => {
+                const date = entry.date;
+                entry.events.forEach(event => {
+                    const row = document.createElement('tr');
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = date;
+                    const titleCell = document.createElement('td');
+                    titleCell.textContent = event.title;
+                    const descriptionCell = document.createElement('td');
+                    descriptionCell.textContent = event.description;
+
+                    row.appendChild(dateCell);
+                    row.appendChild(titleCell);
+                    row.appendChild(descriptionCell);
+
+                    tbody.appendChild(row);
+                });
+            });
+        }
+
+        function getFilteredEvents(jsonData) {
+            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            const filteredEvents = [];
+
+            for (const date in jsonData) {
+                if (date >= today) {
+                    filteredEvents.push({ date: date, events: jsonData[date] });
+                }
+            }
+
+            filteredEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            var events5 = [];
+            for (var i = 0;i<5;i++){
+                events5.push(filteredEvents[i]);
+            }
+            console.log(events5)
+            return events5; 
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const jsonData = await fetchEvents();
+            if (jsonData) {
+                const filteredEvents = getFilteredEvents(jsonData);
+                renderTable(filteredEvents);
+            }
+        });
+</script>
 </html>

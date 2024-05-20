@@ -11,17 +11,61 @@
 <body>
     {% include "navbar.html" %}
     <div class="main-container">
-        <h1>Actions Calendar</h1>
+        <header class="calendarHeader Toblur">
+            <h1>Actions Calendar</h1>
+            {% if session["admin"] %}
+            <button class="eventButton" onclick="eventButtonEvent()">Add Event</button>
+            {% endif %}
+        </header>
+        <form class ="eventModal hide" method="POST" action="/calendarEvent">
+            
+            <button type="button" class="buttonX" onclick="quitButtonEvent()">X</button>
+            <h3>Add Event</h3>
+            
+            <label for="eventTitle">Event Title :</label>
+            <input type="text" name="eventTitle" id ="eventTitle" required>
+            <label for="eventDate">Event Date :</label>
+            <input type="date" name="eventDate" id="eventDate" required>
+            <label for="eventDate">Event Description :</label>
+            <input type="text" name ="eventDescription" id="eventDescription" required>
+            <input type="submit" value="Add Event">
+        </form>
 
-        <div class="calendar">
+        <div class="calendar Toblur">
             <div class="calendar-header">
                 <button id="prevMonthBtn">&lt;</button>
                 <span class="calendar-month-year" id="currentMonthYear"></span>
                 <button id="nextMonthBtn">&gt;</button>
             </div>
             <div class="calendar-body" id="calendarBody"></div>
+
+
+
+        
         </div>
-        <div class ="calendarModal"></div>
+        <div id="eventPopup" class="hide">
+            <header>
+                <p>Events on this day <span id="popupDate"></span></p>
+                <button type="button" class="buttonX" >X</button>
+
+            </header>
+            
+            <table>
+                <thead>
+                    <tr>
+
+                        <th>Title</th>
+                        <th>Description</th>
+                        {% if session["admin"] %}
+                        <th>Filter</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Event rows will be inserted here -->
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 <script>
@@ -96,11 +140,55 @@
             eventMarker.textContent = eventTitles;
             eventMarker.classList.add('event-marker');
             calendarDay.appendChild(eventMarker);
+            console.log("events", events);
 
             calendarDay.addEventListener('click', function() {
                 // Handle click event for calendar day
                 let selectedDate = new Date(currentYear, currentMonth, dayOfMonth);
-                alert(`${selectedDate.toLocaleDateString()}  \n  ${eventDescriptions}`);
+                if (document.getElementById("eventPopup").classList.contains('hide')){
+                    eventPopup(selectedDate.toLocaleDateString(),events);
+
+                    document.querySelectorAll('.popupRemove').forEach(button => {
+
+button.addEventListener('click', (e) => {
+    // Get the list of classes and filter out the common class
+    const classes = button.classList;
+    const uniqueClass = classes[1];
+    console.log(classes);
+    fetch('/removeevent', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ unique_class: uniqueClass })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.message); // Handle the response from Flask
+        
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    
+});
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+                
+                
             });
         }
     } else {
@@ -138,6 +226,90 @@
         })
         .catch(error => console.error('Error loading calendar data:', error));
 });
+
+
+function eventButtonEvent() {
+    // Select all elements with the class "ToBlur"
+    document.querySelectorAll(".Toblur").forEach(element => {
+        element.classList.add("blur");
+    });
+
+    // Select all elements with the class "eventModal"
+    document.querySelectorAll(".eventModal").forEach(element => {
+        element.classList.remove("hide");
+    });
+}
+
+function quitButtonEvent(){
+    document.querySelectorAll(".eventModal").forEach(element => {
+        element.classList.add("hide");
+    });
+    document.querySelectorAll(".Toblur").forEach(element => {
+        element.classList.remove("blur");
+    });
+
+
+}
+
+function eventPopup(eventDate,events ){
+    document.getElementById("popupDate").innerHTML = eventDate;
+    const tableBody = document.querySelector('#eventPopup table tbody');
+
+// Loop through each event in the array
+events.forEach(event => {
+    // Create a new row
+    const row = document.createElement('tr');
+
+    // Create a cell for the title
+    const titleCell = document.createElement('td');
+    titleCell.classList.add("popupTitle")
+    titleCell.textContent = event.title;
+
+    // Create a cell for the description
+    const descriptionCell = document.createElement('td');
+    descriptionCell.textContent = event.description;
+
+
+    const removeCell = document.createElement('td');
+    const removeButton = document.createElement('button')
+    removeButton.textContent =  "Remove"
+    {% if session["admin"] %}
+        removeCell.appendChild(removeButton);
+    {% endif %}
+    removeButton.classList.add("popupRemove")
+    var tit =  event.title
+    removeButton.classList.add(tit.replace(" ","_"))
+    // Append the cells to the row
+    row.appendChild(titleCell);
+    row.appendChild(descriptionCell);
+    row.appendChild(removeCell)
+
+    // Append the row to the table body
+    tableBody.appendChild(row);
+
+});
+document.getElementById("eventPopup").classList.remove("hide");
+document.querySelectorAll(".Toblur").forEach(element => {
+        element.classList.add("blur");
+    });
+document.querySelector("#eventPopup .buttonX").addEventListener("click",function(){
+    const tableBody = document.querySelector('#eventPopup table tbody');
+    tableBody.innerHTML = '';
+    document.getElementById("eventPopup").classList.add("hide");
+    document.querySelectorAll(".Toblur").forEach(element => {
+        element.classList.remove("blur");
+    });
+})
+
+
+
+
+}
+
+
+
+
+
 
 </script>
 </html>

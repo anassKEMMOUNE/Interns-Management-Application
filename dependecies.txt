@@ -7,4 +7,5 @@ nltk pip
 unidecode pip
 flasmk pip
 mammoth pip
+flask_mail pip
 source venv/bin/activate

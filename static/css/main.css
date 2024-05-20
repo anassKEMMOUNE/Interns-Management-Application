@@ -24,7 +24,7 @@ body, html {
 
 .content-container {
     background-color: #fff;
-    padding: 20px;
+    padding: 5px 20px 20px 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     
@@ -73,25 +73,36 @@ body, html {
     text-align: center;
 
 }
+.email-table,#eventsTable {
+    width: 80%;
+    border-collapse: collapse;
+    margin: auto;
+    margin-top: 20px;
+    text-align: center;
+}
 
-.cv-table thead {
+.cv-table thead,.email-table thead,#eventsTable thead,#eventPopup thead {
     background-color: #f2f2f2;
 }
 
-.cv-table thead th {
+.cv-table thead th,.email-table thead th , #eventsTable thead th , #eventPopup thead th{
     padding: 10px;
     text-align: center;
 }
 
-.cv-table tbody td {
+.cv-table tbody td,.email-table tbody td , #eventsTable tbody td , #eventPopup tbody td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
 }
 
-.cv-table tbody tr:last-child td {
+.cv-table tbody tr:last-child td,.email-table tbody tr:last-child td , #eventsTable tbody tr:last-child td{
     border-bottom: none;
 }
+.events-container{
 
+    margin-bottom: 20px;
+    margin-top : 20px;
+}
 .btn-remove {
     padding: 5px 10px;
     background-color: #ff4d4d;
@@ -178,4 +189,93 @@ body, html {
     padding: 5px;
     font-weight: bold;
     margin: auto;
+}
+
+.calendarHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.eventModal .buttonX, #eventPopup .buttonX{
+position: relative;
+top: 0;
+left: 103%;
+width: 25px;
+height: 25px;
+font-size: 18px;
+border-radius: 20px;
+background-color: #e33e3e;
+color: white ;
+font-weight: 900;
+border-color: #ff4d4d;
+}
+.eventModal .buttonX:hover , #eventPopup .buttonX:hover{
+     cursor:pointer;
+}
+
+.eventModal{
+    width : 500px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 10px 50px;
+    position: absolute;
+    z-index: 999;
+    top : 25%;
+    left: 40%;
+    filter: none !important;
+}
+.eventModal input {
+    margin-bottom: 10px;
+
+}
+.eventModal label{
+    margin-bottom: 5px;
+    
+}
+
+.blur{
+    filter: blur(5px);
+}
+.hide{
+    display: none;
+}
+
+.footer{
+    margin-left : 350px;
+    margin-top : 10px;
+    margin-bottom: 20px;
+}
+
+.eventButton{
+    padding : 5px 15px;
+    background-color: #156707;
+    border-radius: 10px;
+    color :white;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+#eventPopup{
+    position: absolute;
+    z-index: 999;
+    width: 700px;
+    top: 30%;
+    left: 37%;
+    background-color: #fff;
+    padding:  10px 20px;
+}
+#eventPopup table{
+    width: 100%;
+    text-align: center;
+    margin: 10px;
+    border-collapse:collapse ;
+}
+
+#eventPopup .buttonX{
+    left: 67%;
+}
+
+#eventPopup header {
+    display: flex;
 }
