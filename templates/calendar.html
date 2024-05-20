@@ -164,11 +164,12 @@ button.addEventListener('click', (e) => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data.message); // Handle the response from Flask
+        console.log("ezgvfhiodvfbuoezkjl"); // Handle the response from Flask
+        location.reload();
         
     })
     .catch(error => {
-        console.error('Error:', error);
+        location.reload();
     });
     
 });

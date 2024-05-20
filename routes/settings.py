@@ -60,6 +60,16 @@ def settings_route(app) :
                     return render_template( "settings.html" ,message = result)
                 except Exception as e:
                     return f"Error: {e}"
+                
+            elif action == 'delete_user' : 
+                try:
+                    email = request.form['delete']
+                    conn = User.connect_to_database(os.path.abspath("") +'/database.db')
+                    result = User.delete_user(conn,email)
+                    return render_template( "settings.html" ,message = result)
+                except Exception as e:
+                    return f"Error: {e}"
+
 
 
                     

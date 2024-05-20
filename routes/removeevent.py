@@ -20,7 +20,8 @@ def removeevent_route(app) :
             c.execute("DELETE FROM Calendar WHERE title=?", (unique_id,))
             conn.commit()
             conn.close()
-
-            return redirect(url_for("calendars"))
+            print("done")
+            return redirect(url_for("index"))
         except :
-            return
+            print("exception")
+            return redirect(url_for("index"))

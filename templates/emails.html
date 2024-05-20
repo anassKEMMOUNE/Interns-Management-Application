@@ -9,14 +9,15 @@
 <body>
     {% include "navbar.html" %}
     <div class="main-container">
+        
         <div class="content-container">
             <h2>Users Birthdays</h2>
+            <input type="text" id="searchBar" class="form-control mb-3" placeholder="Search by Full Name...">       
             <table class="email-table">
                 <thead>
                     <tr>
                         <th>Email</th>
                         <th>Name</th>
-                        <th>Last Name</th>
                         <th>Birthday</th>
                         <th>Days Left to Birthday</th>
                     </tr>
@@ -25,8 +26,7 @@
                     {% for user in users %}
                         <tr>
                             <td>{{ user['email'] }}</td>
-                            <td>{{ user['name'] }}</td>
-                            <td>{{ user['lastname'] }}</td>
+                            <td>{{ user['lastname'] }} {{ user['name'] }}</td>
                             <td>{{ user['birthday'] }}</td>
                             <td>{{ user['left_to_birthday'] }} days</td>
                         </tr>
@@ -36,4 +36,24 @@
         </div>
     </div>
 </body>
+
+
+<script>
+        // JavaScript for filtering table rows based on search input
+        document.getElementById('searchBar').addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#emailTableBody tr');
+            tableRows.forEach(row => {
+                const fullName = row.cells[1].textContent.toLowerCase();
+                if (fullName.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </html>
+
+
+
